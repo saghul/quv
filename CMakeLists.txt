@@ -57,6 +57,19 @@ add_subdirectory(deps/sqlite3 EXCLUDE_FROM_ALL)
 set(BUILD_WASI "simple" CACHE STRING "WASI implementation")
 add_subdirectory(deps/wasm3 EXCLUDE_FROM_ALL)
 
+#TODO: Add some sane configuration for it and possible profiles.
+#https://github.com/bytecodealliance/wasm-micro-runtime/blob/main/doc/embed_wamr.md
+set (WAMR_BUILD_PLATFORM "linux")
+set (WAMR_BUILD_TARGET "X86_64")
+set (WAMR_ROOT_DIR deps/wamr)
+set (WAMR_BUILD_INTERP 1)
+set (WAMR_BUILD_FAST_INTERP 0)
+set (WAMR_BUILD_AOT 0)
+set (WAMR_BUILD_LIBC_BUILTIN 1)
+set (WAMR_BUILD_LIBC_WASI 1)
+set (WAMR_BUILD_SIMD 1)
+include(${WAMR_ROOT_DIR}/build-scripts/runtime_lib.cmake)
+
 if(BUILD_WITH_MIMALLOC)
     option(MI_OVERRIDE "" OFF)
     option(MI_BUILD_SHARED "" OFF)
@@ -83,6 +96,7 @@ add_library(tjs STATIC
     src/version.c
     src/vm.c
     src/wasm.c
+    src/wamr.c
     src/worker.c
     src/ws.c
     src/xhr.c
@@ -103,6 +117,7 @@ add_library(tjs STATIC
     src/bundles/c/core/run-repl.c
     src/bundles/c/core/worker-bootstrap.c
     deps/quickjs/cutils.c
+    ${WAMR_RUNTIME_LIB_SOURCE}
 )
 
 if(UNIX)

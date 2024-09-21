@@ -16,3 +16,6 @@
 [submodule "deps/mimalloc"]
 	path = deps/mimalloc
 	url = https://github.com/microsoft/mimalloc
+[submodule "deps/wamr"]
+	path = deps/wamr
+	url = https://github.com/bytecodealliance/wasm-micro-runtime
