@@ -51,6 +51,10 @@ declare module 'tjs:ffi'{
         call(...argsJs: JAT): JRT;
     }
 
+    export function CString(str:string):{
+        toString():string
+    }
+
     export const types: {
         void: SimpleType<void>,
         uint8: SimpleType<number>,
@@ -79,8 +83,8 @@ declare module 'tjs:ffi'{
         size: SimpleType<number>,
         ssize: SimpleType<number>,
 
-        string: SimpleType<string>
-        
+        cstring: SimpleType<typeof CString>
+
         buffer: SimpleType<Uint8Array>
         
         jscallback: SimpleType<(...args: any)=>any>

@@ -162,6 +162,22 @@ export class CFunction {
     }
 }
 
+export function CString(str) {
+    let buffer = (str!==undefined)?((new TextEncoder()).encode(str+'\0')):new Uint8Array();
+
+    return {
+        get buffer() {
+            return buffer;
+        },
+        set buffer(v) {
+            buffer=v;
+        },
+        toString() {
+            return ffiInt.getCString(ffiInt.getArrayBufPtr(buffer), buffer.length);
+        }
+    };
+}
+
 export const types = {
     void: ffiInt.type_void,
     uint8: ffiInt.type_uint8,
@@ -190,22 +206,17 @@ export const types = {
     size: ffiInt.type_size,
     ssize: ffiInt.type_ssize,
 
-    string: new AdvancedType(ffiInt.type_pointer, {
-        toBuffer: (str, ctx)=>{
-            ctx.buf = (new TextEncoder()).encode(str+'\0');
 
-            // cstrings are pointers char*, the pointer itself is the argument, and since ffi expects pointers
-            // to the argument data, so we effectively need a char**.
-            // If we return the ptr to the buffer, the C code will handle the allocation for us.
-            return ffiInt.getArrayBufPtr(ctx.buf);
-        },
+    cstring: new AdvancedType(ffiInt.type_pointer, {
+        toBuffer: (str, _ctx)=>ffiInt.getArrayBufPtr(str.buffer),
         fromBuffer: buf=>{
+            // TODO: Bad double operation to fix
             const ptr = ffiInt.type_pointer.fromBuffer(buf); // char*
             const str = ffiInt.getCString(ptr); // string
 
-            return str;
+            return CString(str);
         },
-        name: 'string'
+        name: 'cstring'
     }),
 
     buffer: new AdvancedType(ffiInt.type_pointer, {
@@ -258,7 +269,7 @@ const typeMap = [
 
     [ types.size, [ 'size_t' ] ],
     [ types.ssize, [ 'ssize_t' ] ],
-    [ types.string, [ 'char*' ] ],
+    [ types.cstring, [ 'char*' ] ],
 
 ];
 
