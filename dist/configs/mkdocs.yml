@@ -1,0 +1,21 @@
+site_name: vs.templ
+repo_url: https://bettercallsaghul.com/txiki.js/
+site_dir: ../website/docs
+docs_dir: ../../docs
+
+theme:
+  name: readthedocs
+  custom_dir: ./
+  logo:
+markdown_extensions:
+  - def_list
+  - admonition
+  - pymdownx.tilde
+  - pymdownx.tasklist
+  - mdx_truly_sane_lists
+  - smarty
+  - toc:
+      permalink: "#"
+plugins:
+  - search
+  - gh-admonitions

@@ -1,6 +1,7 @@
 .vscode
 .idea
 .DS_Store
+.bun.lockb
 
 build/
 src/bundles/js/

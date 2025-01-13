@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "postinstall": "patch-package",
+    "docs": "./dist/make-docs.sh",
     "api-docs": "typedoc --tsconfig types/tsconfig.doc.json",
     "api-docs-watch": "typedoc --tsconfig types/tsconfig.doc.json --watch --preserveWatchOutput --logLevel Verbose",
     "deploy-api-docs": "gh-pages -d types/api -e api -u \"github-actions-bot <support+actions@github.com>\"",

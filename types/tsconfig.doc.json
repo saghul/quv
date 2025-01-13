@@ -7,7 +7,7 @@
         "name": "txiki.js",
         "entryPoints": [ "src/" ],
         "entryPointStrategy": "expand",
-        "out": "api/",
+        "out": "../dist/website/api/",
         "readme": "intro.md",
         "disableSources": true,
         "exclude":["src/index.d.ts"],

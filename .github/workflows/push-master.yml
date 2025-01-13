@@ -1,0 +1,12 @@
+name: Docs `next`
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  docs:
+    uses: ./.github/workflows/docs.yml
+    permissions:
+      contents: write
+      pages: write

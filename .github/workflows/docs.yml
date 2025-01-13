@@ -1,0 +1,44 @@
+name: Deploy Docs
+
+on:
+  workflow_dispatch:
+    inputs:
+      subdir:
+        type: string
+        required: false
+        default: "next"
+  workflow_call:
+    inputs:
+      subdir:
+        type: string
+        required: false
+        default: "next"
+jobs:
+  build-deploy:
+    permissions:
+      contents: write
+      pages: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Build
+        run: |
+          sudo apt install -y \
+            doxygen \
+            graphviz \
+            python3-pip \
+            python3-setuptools
+          python3 -m pip install mkdocs mkdocs-github-admonitions-plugin mkdocs-get-deps pymdown-extensions mdx_truly_sane_lists
+          ./dist/make-docs.sh
+          bun install -g gh-pages
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/website
+          destination_dir: ${{ inputs.subdir }}
